@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas_datareader as data
 from keras.models import load_model
 import streamlit as st
+import yfinance as yf
 
 
 
@@ -22,23 +23,23 @@ st.write(df.describe())
 #visualizations
 st.subheader('Closing Price vs Time chart')
 fig= plt.figure(figsize = (12,6))
-plt.plot(df.close)
+plt.plot(df.Close)
 st.pyplot(fig)
 
 st.subheader('Closing Price vs Time chart with 100MA')
-ma100= df.Close.rolling(100).mean
+ma100= df.Close.rolling(100).mean()
 fig= plt.figure(figsize = (12,6))
 plt.plot(ma100)
-plt.plot(df.close)
+plt.plot(df.Close)
 st.pyplot(fig)
 
 st.subheader('Closing Price vs Time chart with 100MA & 200MA')
-ma100= df.Close.rolling(100).mean
-ma100= df.Close.rolling(200).mean
+ma100= df.Close.rolling(100).mean()
+ma200= df.Close.rolling(200).mean()
 fig= plt.figure(figsize = (12,6))
 plt.plot(ma100)
 plt.plot(ma200)
-plt.plot(df.close)
+plt.plot(df.Close)
 st.pyplot(fig)
 
 
@@ -88,8 +89,10 @@ y_test = y_test * scale_factor
 #final graph
 st.subheader('PREDICTION VS Original')
 fig2= plt.figure(figsize=(12,6))
+y_test = y_test.reshape(y_test.shape[0], y_test.shape[1])
+y_predicted = y_predicted.reshape(y_predicted.shape[0], y_predicted.shape[1])
 plt.plot(y_test, 'b', label = 'Original Price')
-plt.plot(x_predicted, 'r', label = 'Predicted Price')
+plt.plot(y_predicted, 'r', label = 'Predicted Price')
 plt.xlabel('Time')
 plt.ylabel('Price')
 plt.legend()
